@@ -3,6 +3,20 @@ function increaseBoldTextSize() {
   var body = doc.getBody();
   var paragraphs = body.getParagraphs();
 
+  var ui = DocumentApp.getUi();
+  var response = ui.prompt("Font Size", "Enter the desired font size:", ui.ButtonSet.OK_CANCEL);
+
+  if (response.getSelectedButton() !== ui.Button.OK) {
+    return;
+  }
+
+  var newSize = parseInt(response.getResponseText());
+
+  if (isNaN(newSize)) {
+    Logger.log("Invalid font size. Please enter a numeric value.");
+    return;
+  }
+
   for (var i = 0; i < paragraphs.length; i++) {
     var paragraph = paragraphs[i];
     var text = paragraph.getText();
@@ -18,7 +32,7 @@ function increaseBoldTextSize() {
           var endIndex = k === textItem.getTextAttributeIndices().length - 1 ? text.length : textItem.getTextAttributeIndices()[k + 1];
 
           if (textItem.isBold(startIndex)) {
-            textItem.setFontSize(startIndex, endIndex - 1, textItem.getFontSize() + 4);
+            textItem.setFontSize(startIndex, endIndex - 1, newSize);
           }
         }
       }
